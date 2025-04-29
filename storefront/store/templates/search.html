@@ -1,0 +1,86 @@
+{% extends 'base.html'%}
+
+{% block content %}
+        <!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Search Products</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Find out what you are looking for...</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- About Section-->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <center>
+                        <div class="col-10">
+                           
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="card">
+                                        <div class="card-header">
+                                            Featured
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="text" class="form-control mb-3" 
+                                            placeholder="Search For Products" name="searched">
+                                            <button type="submit" class="btn btn-secondary">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <br>
+                                  {%if searched %}
+                                  <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                                    {% for product in searched %}
+                                    <div class="col mb-5">
+                                        <div class="card h-100">
+                                            <!-- Product image-->
+                                            <div class="position-relative">
+                                                <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
+                                                {% if product.is_sale %}
+                                                <div class="badge bg-light text-black position-absolute" style="top: 0.5rem; right: 0.5rem">
+                                                    Sale
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <!-- Product details-->
+                                            <div class="card-body p-4">
+                                                <div class="text-center">
+                                                    <!-- Product name-->
+                                                    <h5 class="fw-bolder">{{product.name}}</h5>
+                                                    <!-- Product price-->
+                                                    {% if product.is_sale %}
+                                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                                        <i class="bi-star-fill"></i>
+                                                        &nbsp;&nbsp;Sale!&nbsp;&nbsp;
+                                                        <i class="bi-star-fill"></i>
+                                                    </div>
+                                                    <strike>${{ product.price }}</strike>
+                                                    &nbsp;
+                                                    ${{ product.sale_price }}
+                                                    {% else %}
+                                                    ${{ product.price }}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <!-- Product actions-->
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View Product</a></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                  {%endif%}
+                           
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock %}

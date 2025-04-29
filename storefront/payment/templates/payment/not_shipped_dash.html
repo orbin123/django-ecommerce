@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+
+{% block content %}
+        
+
+        <!-- About Section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8">
+                        <br/> <br/>
+                        <h3>Un-Shipped Items</h3>
+                        <br/>
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead class="table-dark">
+                              <tr>
+                                
+                                <th scope="col">Order</th>
+                                <th scope="col">Prices</th>
+                                <th scope="col">Customer Email</th>
+                                <th scope="col">Date Ordered</th>
+                                <th scope="col">Shipped</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                              <tr>
+                                <td><a href="{% url 'orders' order.id %}">{{order.id }}</a></td>
+                                <td>${{order.amount_paid }}</td>
+                                <td>{{order.email }}</td>
+                                <td>{{order.date_ordered }}</td>
+                                <td>
+                                  <form method="POST">
+                                    {%csrf_token%}
+                                    <input type="hidden" name="shipping_status" value="true">
+                                    <input type="hidden" name="num" value="{{order.id}}">
+                                    <button type="submit" class="btn btn-success btn-sm">Mark Unshipped</button>
+                                  </form>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+{% endblock %}
